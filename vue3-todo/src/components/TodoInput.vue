@@ -21,26 +21,25 @@
 <script setup>
 
 import { ref } from 'vue'
-import MyModal from './common/MyModal.vue'
+import { useStore } from "vuex"
 
+import MyModal from './common/MyModal.vue'
 
 const newTodoItem = ref("")
 const showModal = ref(false)
-
-
-const emit = defineEmits(["add:todo"])//커스텀 이벤트
+const store = useStore()
 
 const handleInput = (event) => {
     const todoText = event.target.value
     if (!todoText) return
-    emit("input:todo", todoText)
+    //emit("input:todo", todoText)
     newTodoItem.value = todoText
 }
 
 const addTodo = () => {
     if (newTodoItem.value !== "") {
         const todoItem = newTodoItem.value
-        emit("add:todo", todoItem)
+        store.commit("addTodo", todoItem)
         clearInput();
     } else {
         showModal.value = !showModal.value  //아무것도 입력되지 않았을시에, flag값 변경

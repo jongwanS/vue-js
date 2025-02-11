@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <TodoHeader></TodoHeader>
-    <TodoInput @add:todo="addTodo"></TodoInput>
-    <TodoList :todo-list="todoItems" @remove:todo="removeTodo" @toggle:todo="toggleTodo"></TodoList>
-    <TodoFooter @clear:todo="clearTodo"></TodoFooter>
+    <TodoInput ></TodoInput>
+    <TodoList :todo-list="todoItems"></TodoList>
+    <TodoFooter></TodoFooter>
   </div>
 </template>
 
@@ -12,7 +12,6 @@ import TodoHeader from '@/components/TodoHeader.vue'
 import TodoInput from '@/components/TodoInput.vue'
 import TodoList from '@/components/TodoList.vue'
 import TodoFooter from '@/components/TodoFooter.vue'
-import { onBeforeMount, reactive } from 'vue'
 
 export default ({
   components: {
@@ -20,45 +19,7 @@ export default ({
   },
 
   setup() {
-    const todoItems = reactive([]);
-
-    const addTodo = (todoItemStr) => {
-      const todoItemObj = { completed: false, item: todoItemStr };
-      localStorage.setItem(todoItemStr, JSON.stringify(todoItemObj));
-      todoItems.push(todoItemObj);
-    };//addTodo
-
-    const removeTodo = (todo, index) => {
-      localStorage.removeItem(todo.item)
-      todoItems.splice(index, 1)
-    }
-
-    const toggleTodo = (todoItem, index) => {
-      const { completed, item } = todoItem
-      todoItems[index].completed = !completed;
-      localStorage.setItem(item, JSON.stringify(todoItems[index]));
-    }
-
-    const clearTodo = () => {
-      localStorage.clear()
-      todoItems.splice(0)
-    }
-
-
-    onBeforeMount(() => {
-      if (localStorage.length > 0) {
-        for (var i = 0; i < localStorage.length; i++) {
-          const storageKey = localStorage.key(i)
-          const itemJson = localStorage.getItem(storageKey)
-          if (itemJson) {
-            todoItems.push(JSON.parse(itemJson));
-          } //if
-        } //for
-      } //if
-    });
-
-    return { todoItems, addTodo, removeTodo, toggleTodo, clearTodo };
-
+    return { };
   }, //setup
 
 })

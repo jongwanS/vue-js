@@ -7,15 +7,18 @@
 </template>
 
 <script>
+import { useStore } from "vuex"
+
 export default {
-    emits: ['clear:todo'],
-    setup(props, { emit }) {    //setup 옵션에서 props를 안써도 emit이 파라미터 이므로 setpup을 적는다.
+    setup() {
+        const store = useStore()
         const clearTodo = () => {
-            emit('clear:todo')
+            store.commit("clearTodo")
         }
         return { clearTodo }
     }
 }
+
 </script>
 
 <style scoped>

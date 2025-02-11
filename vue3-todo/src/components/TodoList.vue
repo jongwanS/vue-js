@@ -1,7 +1,7 @@
 <template>
     <div>
         <TransitionGroup name="list" tag="ul">
-            <li v-for="(todo, index) in props.todoList" :key="index" class="shadow">
+            <li v-for="(todo, index) in todoItems" :key="index" class="shadow">
 
                 <i class="fas fa-check checkBtn" :class="{ checkBtnCompleted: todo.completed }"
                     @click="toggleComplete(todo, index)">
@@ -16,16 +16,22 @@
 </template>
 
 <script setup>
+import { useStore } from "vuex"
+import { computed } from "vue"
 
-const props = defineProps(["todoList"])
-const emit = defineEmits(["remove:todo", "toggle:todo"])//커스텀 이벤트
+//vuex 스토어 저장소 로드
+const store = useStore() 
+//vux 저장된 todoItems 조회
+//computed는 변경되었을때만 실행된다. methods는 실행할때마다
+const todoItems = computed(() => store.state.todoItems) 
 
-const removeTodo = (todo, index) => {
-    emit("remove:todo", todo, index)
+const removeTodo = (todoItem, index) => {
+    store.commit("removeTodo", {todoItem, index})
 }
 
 const toggleComplete = (todoItem, index) => {
-    emit("toggle:todo", todoItem, index)
+    //emit("toggle:todo", todoItem, index)
+    store.commit("toggleTodo", {todoItem, index})
 };
 
 </script>
