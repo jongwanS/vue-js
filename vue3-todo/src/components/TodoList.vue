@@ -21,21 +21,21 @@ import { computed, onMounted } from "vue"
 
 //vuex 스토어 저장소 로드
 const store = useStore()
-//vux 저장된 todoItems 조회
+
 //computed는 변경되었을때만 실행된다. methods는 실행할때마다
-const todoItems = computed(() => store.state.todoItems)
+const todoItems = computed(() => store.state.moduleTodo.todoItems)
 
 onMounted(() => {
     console.log('onMounted...')
     //dispatch를 통해 데이터를 불러온다.
     //loadTodoItems함수 는 vux에서 axios 로 불러온다.
-    store.dispatch("loadTodoItems")
+    store.dispatch("moduleTodo/loadTodoItems")
 })
 
 const removeTodo = (todoItem) => {
     //dispatch를 통해 데이터를 불러온다.
     //removeTodo 함수 는 해당 아이템을 삭제한다.
-    store.dispatch("removeTodo", todoItem)
+    store.dispatch("moduleTodo/removeTodo", todoItem)
 }
 
 
@@ -43,7 +43,7 @@ const toggleComplete = (todoItem) => {
     //emit("toggle:todo", todoItem, index)
     //store.commit("toggleTodo", { todoItem, index })
     todoItem.completed = !todoItem.completed 
-    store.dispatch("toggleTodo", todoItem)
+    store.dispatch("moduleTodo/toggleTodo", todoItem)
 };
 
 </script>

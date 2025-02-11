@@ -13,7 +13,7 @@ export default {
     setup() {
         const store = useStore()
         const clearTodo = () => {
-            store.dispatch("clearTodo")
+            store.dispatch("moduleTodo/clearTodo")
         }
         return { clearTodo }
     }
