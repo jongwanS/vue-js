@@ -1,8 +1,18 @@
 <template>
     <header>
-        <h1>TODO it!</h1>
+        <h1>TODO it! ({{ mode }})</h1>
     </header>
 </template>
+
+<script>
+export default {
+    setup() {
+        const mode = process.env.VUE_APP_TITLE
+        return { mode }
+    }
+}
+</script>
+
 <style scoped>
 h1 {
     color: #2F3852;

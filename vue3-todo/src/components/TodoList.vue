@@ -4,10 +4,10 @@
             <li v-for="(todo, index) in todoItems" :key="index" class="shadow">
 
                 <i class="fas fa-check checkBtn" :class="{ checkBtnCompleted: todo.completed }"
-                    @click="toggleComplete(todo, index)">
+                    @click="toggleComplete(todo)">
                     <span :class="{ textCompleted: todo.completed }">{{ todo.item }}</span>
                 </i>
-                <span class="removeBtn" @click="removeTodo(todo, index)">
+                <span class="removeBtn" @click="removeTodo(todo)">
                     <i class="fas fa-trash-alt"></i>
                 </span>
             </li>
@@ -17,21 +17,33 @@
 
 <script setup>
 import { useStore } from "vuex"
-import { computed } from "vue"
+import { computed, onMounted } from "vue"
 
 //vuex 스토어 저장소 로드
-const store = useStore() 
+const store = useStore()
 //vux 저장된 todoItems 조회
 //computed는 변경되었을때만 실행된다. methods는 실행할때마다
-const todoItems = computed(() => store.state.todoItems) 
+const todoItems = computed(() => store.state.todoItems)
 
-const removeTodo = (todoItem, index) => {
-    store.commit("removeTodo", {todoItem, index})
+onMounted(() => {
+    console.log('onMounted...')
+    //dispatch를 통해 데이터를 불러온다.
+    //loadTodoItems함수 는 vux에서 axios 로 불러온다.
+    store.dispatch("loadTodoItems")
+})
+
+const removeTodo = (todoItem) => {
+    //dispatch를 통해 데이터를 불러온다.
+    //removeTodo 함수 는 해당 아이템을 삭제한다.
+    store.dispatch("removeTodo", todoItem)
 }
 
-const toggleComplete = (todoItem, index) => {
+
+const toggleComplete = (todoItem) => {
     //emit("toggle:todo", todoItem, index)
-    store.commit("toggleTodo", {todoItem, index})
+    //store.commit("toggleTodo", { todoItem, index })
+    todoItem.completed = !todoItem.completed 
+    store.dispatch("toggleTodo", todoItem)
 };
 
 </script>

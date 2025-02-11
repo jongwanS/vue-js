@@ -39,7 +39,9 @@ const handleInput = (event) => {
 const addTodo = () => {
     if (newTodoItem.value !== "") {
         const todoItem = newTodoItem.value
-        store.commit("addTodo", todoItem)
+        const itemObj = { completed: false, item: todoItem }
+        //store.commit("addTodo", todoItem) : mutation 호출시
+        store.dispatch("addTodo", itemObj)
         clearInput();
     } else {
         showModal.value = !showModal.value  //아무것도 입력되지 않았을시에, flag값 변경
