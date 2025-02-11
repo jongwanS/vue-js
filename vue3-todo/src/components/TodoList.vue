@@ -1,48 +1,47 @@
 <template>
     <div>
-        <ul>
-            <li v-for="(todo, index) in todoItems" :key="index" class="shadow"> 
-                <i :class="{checkBtnCompleted: todo.completed}" @click="toggleComplete(todo)">
+        <TransitionGroup name="list" tag="ul">
+            <li v-for="(todo, index) in props.todoList" :key="index" class="shadow">
+
+                <i class="fas fa-check checkBtn" :class="{ checkBtnCompleted: todo.completed }"
+                    @click="toggleComplete(todo, index)">
                     <span :class="{ textCompleted: todo.completed }">{{ todo.item }}</span>
                 </i>
-                <span class="removeBtn" @click="removeTodo(item, index)">
+                <span class="removeBtn" @click="removeTodo(todo, index)">
                     <i class="fas fa-trash-alt"></i>
                 </span>
             </li>
-        </ul>
+        </TransitionGroup>
     </div>
 </template>
 
 <script setup>
-import { ref, onBeforeMount } from 'vue'
-const todoItems = ref([])
 
-onBeforeMount(() => {
-    console.log('mounted in the composition api!')
-    if (localStorage.length > 0) {
-        for (var i = 0; i < localStorage.length; i++) {
-            const storageKey = localStorage.key(i)
-            const itemJson = localStorage.getItem(storageKey);
-            todoItems.value.push(JSON.parse(itemJson));
-        }
-    }
-    console.log(todoItems.value)
-})
+const props = defineProps(["todoList"])
+const emit = defineEmits(["remove:todo", "toggle:todo"])//커스텀 이벤트
 
-const removeTodo = (todoItem, index) => {
-    localStorage.removeItem(todoItem)
-    todoItems.value.splice(index, 1)
+const removeTodo = (todo, index) => {
+    emit("remove:todo", todo, index)
 }
 
-const toggleComplete = (todoItem) => {
-    todoItem.completed = !todoItem.completed;
-    localStorage.removeItem(todoItem.item);
-    localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-}
+const toggleComplete = (todoItem, index) => {
+    emit("toggle:todo", todoItem, index)
+};
 
 </script>
 
 <style scoped>
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
 ul {
     list-style-type: none;
     padding-left: 0px;
